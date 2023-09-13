@@ -15,6 +15,30 @@
 ## [민웅](<./우물 안 개구리/민웅.py>)
 
 ```py
+import sys
+input = sys.stdin.readline
+
+N, M = map(int, input().split())
+
+W_lst = list(map(int, input().split()))
+
+p_lst = [[] for _ in range(N+1)]
+
+cnt = 0
+for _ in range(M):
+    a, b = map(int, input().split())
+    p_lst[a].append(b)
+    p_lst[b].append(a)
+
+for i in range(N):
+    temp = W_lst[i]
+    for v in p_lst[i+1]:
+        if W_lst[v-1] >= temp:
+            break
+    else:
+        cnt += 1
+
+print(cnt)
 
 ```
 
@@ -132,31 +156,31 @@ print(cnt)
 <summary>접기/펼치기</summary>
 <div markdown="1">
 
-## [민웅](<./1의 개수 세기/민웅.py>)
+## [민웅](<./1의%20개수%20세기/민웅.py>)
 
 ```py
 
 ```
 
-## [병국](<./1의 개수 세기/병국.py>)
+## [병국](<./1의%20개수%20세기/병국.py>)
 
 ```py
 
 ```
 
-## [상미](<./1의 개수 세기/상미.py>)
+## [상미](<./1의%20개수%20세기/상미.py>)
 
 ```py
 
 ```
 
-## [서희](<./1의 개수 세기/서희.py>)
+## [서희](<./1의%20개수%20세기/서희.py>)
 
 ```py
 
 ```
 
-## [성구](<./1의 개수 세기/성구.py>)
+## [성구](<./1의%20개수%20세기/성구.py>)
 
 ```py
 
