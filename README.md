@@ -68,7 +68,7 @@ for _ in range(m):
             answer[a-1] = -1
         else:
             answer[a-1] = -1
-        answer[b-1] = -1 
+        answer[b-1] = -1
     elif answer[a-1] != -1 and answer[b-1] != -1:
         if arr[a-1] > arr[b-1]:
             answer[a-1] = 1
@@ -195,7 +195,55 @@ print(min(answer))
 ## [성구](<./진우의%20달%20여행(small)/성구.py>)
 
 ```py
+# 진우의 달 여행 (Small)
+'''
+python 34176 KB 68 ms
+'''
+import sys
+from collections import deque
 
+input = sys.stdin.readline
+
+# input
+N, M = map(int, input().split())
+fuel_mat = [list(map(int, input().split())) for _ in range(N)]
+
+# define
+dir = [(1, -1), (1, 0), (1, 1)]
+min_fuel = 3601
+visited = [[3601] * M for _ in range(N)]
+
+
+# dfs 풀이
+def dfs(y, x):
+    global min_fuel
+    # 초기값 설정
+    stack = [(y, x, -1, fuel_mat[y][x])]
+    while stack:
+        i, j, preD, fuel = stack.pop()
+        if i == N - 1:
+            # 달에 도착하면 최소 연료 체크
+            min_fuel = min(min_fuel, fuel)
+            continue
+        # 가지치기(이미 최소 연료를 넘어서면 넘김)
+        if min_fuel <= fuel:
+            continue
+        # 방향 체크
+        for idx in range(3):
+            # 이미 지나온 방향이면 패스
+            if idx == preD:
+                continue
+            # 갈 수 있는 방향 체크
+            ni, nj = i + dir[idx][0], j + dir[idx][1]
+            if 0 <= ni < N and 0 <= nj < M:
+                stack.append((ni, nj, idx, fuel + fuel_mat[ni][nj]))
+
+
+# 모든 곳에서 출발 가능
+for m in range(M):
+    dfs(0, m)
+
+print(min_fuel)
 ```
 
 </div>
@@ -210,31 +258,31 @@ print(min(answer))
 <summary>접기/펼치기</summary>
 <div markdown="1">
 
-## [민웅](<./1의%20개수%20세기/민웅.py>)
+## [민웅](./1의%20개수%20세기/민웅.py)
 
 ```py
 
 ```
 
-## [병국](<./1의%20개수%20세기/병국.py>)
+## [병국](./1의%20개수%20세기/병국.py)
 
 ```py
 
 ```
 
-## [상미](<./1의%20개수%20세기/상미.py>)
+## [상미](./1의%20개수%20세기/상미.py)
 
 ```py
 
 ```
 
-## [서희](<./1의%20개수%20세기/서희.py>)
+## [서희](./1의%20개수%20세기/서희.py)
 
 ```py
 
 ```
 
-## [성구](<./1의%20개수%20세기/성구.py>)
+## [성구](./1의%20개수%20세기/성구.py)
 
 ```py
 
@@ -279,6 +327,78 @@ print(min(answer))
 ## [성구](<./컨베이어 벨트 위의 로봇/성구.py>)
 
 ```py
+# 20055 컨베이어 벨트 위의 로봇
+"""
+python 31256 KB 4168 ms
+pypy   115432KB  312 ms
+"""
+
+import sys
+
+input = sys.stdin.readline
+
+# input
+N, K = map(int, input().split())
+
+A_list = list(map(int, input().split()))
+
+# define
+# 로봇 위치
+robot = [0] * (2 * N)
+# 컨베이어 벨트 로봇 놓는 곳
+start = 0
+# 컨베이어 벨트 로봇 빼는곳
+end = N - 1
+# 턴수
+cnt = 1
+# 0이 된 index
+zero = set()
+
+while True:
+    # 컨베이어 벨트 이동
+    start = start - 1 if start else 2 * N - 1
+    end = end - 1 if end else 2 * N - 1
+    # end위치에 있는 로봇을 뺌
+    robot[end] = 0
+    # 로봇 이동
+    for i in range(N - 1, -1, -1):
+        # 로봇을 발견하면
+        if robot[(start + i) % (2 * N)]:
+            # 바로 앞에 로봇이 없고 내구도가 있는가?
+            if (
+                A_list[(start + 1 + i) % (2 * N)]
+                and not robot[(start + i + 1) % (2 * N)]
+            ):
+                # 그곳이 end 위치인가?
+                if (start + 1 + i) % (2 * N) == end:
+                    # end 위치면 뺌
+                    robot[(start + i) % (2 * N)] = 0
+                # end 아니면 이동 표시
+                else:
+                    robot[(start + i) % (2 * N)], robot[(start + i + 1) % (2 * N)] = (
+                        0,
+                        1,
+                    )
+                # 내구도 깍임
+                A_list[(start + 1 + i) % (2 * N)] -= 1
+                # 내구도가 0이 됬는지 체크, 됬으면 zero에 추가
+                if not A_list[(start + 1 + i) % (2 * N)]:
+                    zero.add((start + 1 + i) % (2 * N))
+    # 내구도가 있는 곳이면 로봇 놓기
+    if A_list[start]:
+        # 로봇 표시
+        robot[start] = 1
+        # 내구도 깍임
+        A_list[start] -= 1
+        # 내구도 0 체크
+        if not A_list[start]:
+            zero.add(start)
+    # 내구도 0인 곳 개수가 K개인가?
+    if len(zero) >= K:
+        break
+    # 턴 ++
+    cnt += 1
+print(cnt)
 
 ```
 
