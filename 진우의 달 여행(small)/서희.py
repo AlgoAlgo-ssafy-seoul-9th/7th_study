@@ -1,24 +1,25 @@
-dxy = [(-1, 1), (0, 1), (1, 1)]
+INF = 1000000
+N, M = map(int, input().split())
+space = [list(map(int, input().split())) for _ in range(N)]
+dp = [[[0] * 3 for _ in range(M)] for _ in range(N)]
+for j in range(M):
+    for k in range(3):
+        dp[0][j][k] = space[0][j]
 
-N,M = map(int, input().split())
+for i in range(1, N):
+    for j in range(M):
+        for k in range(3):
+            if (j == 0 and k == 0) or (j == M - 1 and k == 2):
+                dp[i][j][k] = INF
+                continue
+            if k == 0:
+                dp[i][j][k] = space[i][j] + min(dp[i - 1][j - 1][1], dp[i - 1][j - 1][2])
+            elif k == 1:
+                dp[i][j][k] = space[i][j] + min(dp[i - 1][j][0], dp[i - 1][j][2])
+            else:
+                dp[i][j][k] = space[i][j] + min(dp[i - 1][j + 1][0], dp[i - 1][j + 1][1])
 
-space =  []
-for _ in range(N):
-    space.append(list(map(int, input().split())))
-    
-MinF = 100*N*M
-for i in range(M):
-    temp = 0
-    for j in range(N):
-        temp += space[i][j]
-        for d in dxy:
-            nx = i + d[0]
-            ny = j + d[1]
-            if 0 <= nx < N and 0 <= ny < N:
-                temp += space[nx][ny]
-                if temp > MinF:
-                    break
-    if MinF > temp:
-        MinF = temp
-        
-print(MinF)
+result = INF
+for j in range(M):
+    result = min(result, min(dp[-1][j]))
+print(result)
