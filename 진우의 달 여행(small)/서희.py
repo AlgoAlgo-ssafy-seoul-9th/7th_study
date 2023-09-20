@@ -12,5 +12,13 @@ for i in range(M):
     for j in range(N):
         temp += space[i][j]
         for d in dxy:
-            if 0 <= i + d[0] < N and 0 <= j + d[1] < N:
-                pass
+            nx = i + d[0]
+            ny = j + d[1]
+            if 0 <= nx < N and 0 <= ny < N:
+                temp += space[nx][ny]
+                if temp > MinF:
+                    break
+    if MinF > temp:
+        MinF = temp
+        
+print(MinF)
